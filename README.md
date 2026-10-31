@@ -1,5 +1,11 @@
 # Online Retail 데이터 분석 프로젝트
 
+## SPA 3사 뉴스·검색 분석 대시보드 (Streamlit)
+
+- 로컬 실행: `pip install -r requirements.txt` 후 `streamlit run streamlit_app.py`
+- Streamlit Community Cloud 배포: 이 저장소를 선택하고 Main file path를 `streamlit_app.py`로 지정합니다. API 키 없이 저장소에 포함된 결과 파일(`data/processed/naver_news`, `data/processed/naver_datalab`, `reports/tables/news`, `reports/figures/news_wordcloud`)만 읽습니다.
+- 데이터를 새로 수집하려면 `.env`에 네이버 API HUB 키를 넣고 `src/naver_api_hub.py` → `review_news.py` → `classify_news.py` → `news_keywords.py` → `search_trend.py` 순으로 실행합니다. 자세한 규칙은 `CLAUDE.md`를 참고하세요.
+
 ## 폴더 구조
 
 ```text

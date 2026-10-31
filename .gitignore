@@ -21,6 +21,17 @@ reports/figures/*
 reports/tables/*
 !reports/**/.gitkeep
 
+# Streamlit 대시보드(src/dashboard.py)가 읽는 결과 파일은 배포를 위해 추적
+!data/processed/naver_news/
+data/processed/naver_news/*
+!data/processed/naver_news/naver_news_20261031_1034_category.csv
+!data/processed/naver_news/naver_news_20261031_1034_review.csv
+!data/processed/naver_datalab/
+!reports/tables/news/
+reports/tables/news/*
+!reports/tables/news/naver_news_20261031_1034_keywords.csv
+!reports/figures/news_wordcloud/
+
 # OS temporary files
 .DS_Store
 Thumbs.db

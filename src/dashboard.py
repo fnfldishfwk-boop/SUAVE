@@ -105,12 +105,12 @@ with tab_search:
         st.markdown("**월별 검색량 지수** (3사 동시 조회, 최댓값=100)")
         st.altair_chart(alt.Chart(mm).mark_line(point=True).encode(
             x=alt.X("month:N", title=None), y=alt.Y("ratio:Q", title="지수"), color=brand_color(),
-            tooltip=["brand", "month", alt.Tooltip("ratio:Q", format=".1f")]), use_container_width=True)
+            tooltip=["brand", "month", alt.Tooltip("ratio:Q", format=".1f")]), width="stretch")
     with right:
         st.markdown("**월별 검색 점유율** (3사 합 = 100%)")
         st.altair_chart(alt.Chart(mm).mark_area(opacity=0.85).encode(
             x=alt.X("month:N", title=None), y=alt.Y("share:Q", title="%", stack=True), color=brand_color(),
-            tooltip=["brand", "month", alt.Tooltip("share:Q", format=".1f")]), use_container_width=True)
+            tooltip=["brand", "month", alt.Tooltip("share:Q", format=".1f")]), width="stretch")
 
     st.markdown(f"**연령대별 3사 검색 점유율** ({RECENT} ~ 최근)")
     age = share(d["by_age"][d["by_age"]["month"] >= RECENT], "age")
@@ -118,7 +118,7 @@ with tab_search:
     st.altair_chart(alt.Chart(age).mark_bar().encode(
         x=alt.X("age:N", sort=AGES, title=None), xOffset="brand:N", y=alt.Y("share:Q", title="%"),
         color=brand_color(), tooltip=["age", "brand", alt.Tooltip("share:Q", format=".1f")]).properties(height=320),
-        use_container_width=True)
+        width="stretch")
 
     st.markdown("**연령대별 점유율 월간 추이**")
     ba = d["by_age"].copy()
@@ -138,7 +138,7 @@ with tab_search:
         st.altair_chart(alt.Chart(gd).mark_bar().encode(
             x=alt.X("구분:N", sort=["여성", "남성", "모바일", "PC"], title=None), xOffset="brand:N",
             y=alt.Y("share:Q", title="%"), color=brand_color(),
-            tooltip=["구분", "brand", alt.Tooltip("share:Q", format=".1f")]), use_container_width=True)
+            tooltip=["구분", "brand", alt.Tooltip("share:Q", format=".1f")]), width="stretch")
     with r2:
         st.markdown("**쇼핑 클릭 연령 분포** (패션의류 분야, 브랜드별 100%)")
         sa = dist(d["shop_age"], {"10": "10대", "20": "20대", "30": "30대", "40": "40대", "50": "50대", "60": "60대+"})
@@ -147,12 +147,12 @@ with tab_search:
             y=alt.Y("brand:N", sort=BRANDS, title=None), x=alt.X("share:Q", title="%", stack="normalize"),
             color=alt.Color("group:N", sort=AGES, title="연령", scale=alt.Scale(scheme="orangered")),
             order=alt.Order("group:N"), tooltip=["brand", "group", alt.Tooltip("share:Q", format=".1f")]),
-            use_container_width=True)
+            width="stretch")
         sg = pd.concat([dist(d["shop_gender"], {"f": "여성", "m": "남성"}),
                         dist(d["shop_device"], {"mo": "모바일", "pc": "PC"})])
         sg = sg[sg["brand"].isin(sel_brands)]
         st.dataframe(sg.pivot_table(index="brand", columns="group", values="share").round(1)
-                     .reindex(columns=["여성", "남성", "모바일", "PC"]), use_container_width=True)
+                     .reindex(columns=["여성", "남성", "모바일", "PC"]), width="stretch")
     st.info("나이가 어릴수록 스파오, 많을수록 유니클로 점유율이 높습니다. 탑텐은 30~40대가 핵심이고, "
             "텐텐데이가 열리는 10월마다 점유율이 크게 오릅니다. 자세한 해석: reports/search_trend_analysis.md")
 
@@ -166,26 +166,26 @@ with tab_news:
         st.altair_chart(alt.Chart(cat).mark_bar().encode(
             y=alt.Y("brand:N", sort=BRANDS, title=None), x=alt.X("count():Q", title="기사 수", stack="normalize"),
             color=alt.Color("category:N", sort=CATEGORIES, title="주제", scale=alt.Scale(scheme="tableau10")),
-            tooltip=["brand", "category", "count()"]), use_container_width=True)
+            tooltip=["brand", "category", "count()"]), width="stretch")
     with r:
         st.markdown("**주별 보도량** (동일 보도 포함)")
         wk = cat.assign(week=cat["date"].dt.to_period("W").dt.start_time)
         st.altair_chart(alt.Chart(wk).mark_bar().encode(
             x=alt.X("week:T", title=None), y=alt.Y("sum(dup_count):Q", title="보도량"), color=brand_color(),
-            tooltip=["brand", "week:T", "sum(dup_count):Q"]), use_container_width=True)
+            tooltip=["brand", "week:T", "sum(dup_count):Q"]), width="stretch")
 
     st.markdown("**주요 이슈** (동일 보도 수 상위)")
     top = cat.sort_values("dup_count", ascending=False).groupby("brand").head(8)
     st.dataframe(top[["brand", "category", "pubDate", "title", "dup_count", "originallink"]].rename(columns={
         "brand": "브랜드", "category": "주제", "pubDate": "날짜", "title": "제목", "dup_count": "동일 보도",
-        "originallink": "원문"}), use_container_width=True, hide_index=True,
+        "originallink": "원문"}), width="stretch", hide_index=True,
         column_config={"원문": st.column_config.LinkColumn("원문", display_text="열기")})
 
     with st.expander(f"정제 기사 전체 ({len(cat)}건)"):
         q = st.text_input("제목 검색")
         view = cat[cat["title"].str.contains(q, case=False, na=False)] if q else cat
         st.dataframe(view[["brand", "category", "pubDate", "title", "description", "dup_count", "originallink"]],
-                     use_container_width=True, hide_index=True,
+                     width="stretch", hide_index=True,
                      column_config={"originallink": st.column_config.LinkColumn("원문", display_text="열기")})
 
 # ---------- 키워드 ----------
@@ -212,7 +212,7 @@ with tab_kw:
                             unsafe_allow_html=True)
             st.altair_chart(alt.Chart(sub).mark_bar(color=COLORS[BRANDS.index(b)]).encode(
                 y=alt.Y(f"{term}:N", sort="-x", title=None), x=alt.X(f"{val}:Q", title=None),
-                tooltip=[term, val]).properties(height=360), use_container_width=True)
+                tooltip=[term, val]).properties(height=360), width="stretch")
 
 # ---------- 정제 ----------
 with tab_quality:
@@ -224,9 +224,9 @@ with tab_quality:
         y=alt.Y("brand:N", sort=BRANDS, title=None), x=alt.X("count():Q", title="기사 수"),
         color=alt.Color("verdict:N", sort=order, title="판정",
                         scale=alt.Scale(domain=order, range=["#2e8b57", "#8bc34a", "#f0ad4e", "#d9534f", "#9e9e9e"])),
-        tooltip=["brand", "verdict", "count()"]), use_container_width=True)
+        tooltip=["brand", "verdict", "count()"]), width="stretch")
     reasons = (rv[rv["verdict"].isin(["무관", "애매-제외"])].groupby(["brand", "verdict", "reason"]).size()
                .reset_index(name="건수").sort_values("건수", ascending=False))
     st.markdown("**제외 사유 상위**")
-    st.dataframe(reasons.head(20), use_container_width=True, hide_index=True)
+    st.dataframe(reasons.head(20), width="stretch", hide_index=True)
     st.caption("판정 규칙: src/review_news.py, 기준 설명: CLAUDE.md '뉴스 정제 규칙'")
