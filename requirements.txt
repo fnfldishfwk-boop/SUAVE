@@ -1,0 +1,4 @@
+# 대시보드(src/dashboard.py) 실행용. 수집·분석 스크립트는 표준 라이브러리만 사용
+streamlit==1.66.1
+pandas==3.1.0
+altair==6.3.0

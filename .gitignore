@@ -1,0 +1,27 @@
+# Python environments and caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.pytest_cache/
+.ruff_cache/
+
+# Local settings and secrets
+.env
+.env.*
+!.env.example
+
+# Data and generated outputs
+data/raw/*
+data/interim/*
+data/processed/*
+!data/**/.gitkeep
+reports/figures/*
+reports/tables/*
+!reports/**/.gitkeep
+
+# OS temporary files
+.DS_Store
+Thumbs.db
+~$*
